@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="9.10.007">
+  <context>
+    <input/>
+    <output/>
+    <macros/>
+  </context>
+  <operator activated="true" class="process" compatibility="9.10.007" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="read_csv" compatibility="9.10.007" expanded="true" height="68" name="bank-additionl.csv" width="90" x="45" y="238">
+        <parameter key="csv_file" value="F:/Google Drive/ESTUDIOS/MÓDULO 4 - MINERÍA DE DATOS/TFI/RapidMiner/bank-additional.csv"/>
+        <parameter key="column_separators" value=";"/>
+        <parameter key="trim_lines" value="false"/>
+        <parameter key="use_quotes" value="true"/>
+        <parameter key="quotes_character" value="&quot;"/>
+        <parameter key="escape_character" value="\"/>
+        <parameter key="skip_comments" value="true"/>
+        <parameter key="comment_characters" value="#"/>
+        <parameter key="starting_row" value="1"/>
+        <parameter key="parse_numbers" value="true"/>
+        <parameter key="decimal_character" value="."/>
+        <parameter key="grouped_digits" value="false"/>
+        <parameter key="grouping_character" value=","/>
+        <parameter key="infinity_representation" value=""/>
+        <parameter key="date_format" value=""/>
+        <parameter key="first_row_as_names" value="true"/>
+        <list key="annotations"/>
+        <parameter key="time_zone" value="SYSTEM"/>
+        <parameter key="locale" value="English (United States)"/>
+        <parameter key="encoding" value="windows-1252"/>
+        <parameter key="read_all_values_as_polynominal" value="false"/>
+        <list key="data_set_meta_data_information">
+          <parameter key="0" value="age.true.integer.attribute"/>
+          <parameter key="1" value="job.true.polynominal.attribute"/>
+          <parameter key="2" value="marital.true.polynominal.attribute"/>
+          <parameter key="3" value="education.true.polynominal.attribute"/>
+          <parameter key="4" value="default.true.polynominal.attribute"/>
+          <parameter key="5" value="housing.true.polynominal.attribute"/>
+          <parameter key="6" value="loan.true.polynominal.attribute"/>
+          <parameter key="7" value="contact.true.polynominal.attribute"/>
+          <parameter key="8" value="month.true.polynominal.attribute"/>
+          <parameter key="9" value="day_of_week.true.polynominal.attribute"/>
+          <parameter key="10" value="duration.true.integer.attribute"/>
+          <parameter key="11" value="campaign.true.integer.attribute"/>
+          <parameter key="12" value="pdays.true.integer.attribute"/>
+          <parameter key="13" value="previous.true.integer.attribute"/>
+          <parameter key="14" value="poutcome.true.polynominal.attribute"/>
+          <parameter key="15" value="emp\.var\.rate.true.real.attribute"/>
+          <parameter key="16" value="cons\.price\.idx.true.real.attribute"/>
+          <parameter key="17" value="cons\.conf\.idx.true.real.attribute"/>
+          <parameter key="18" value="euribor3m.true.real.attribute"/>
+          <parameter key="19" value="nr\.employed.true.real.attribute"/>
+          <parameter key="20" value="y.true.polynominal.label"/>
+        </list>
+        <parameter key="read_not_matching_values_as_missings" value="false"/>
+      </operator>
+      <operator activated="true" class="filter_examples" compatibility="9.10.007" expanded="true" height="103" name="Filtrado IQR" width="90" x="179" y="34">
+        <parameter key="parameter_expression" value=""/>
+        <parameter key="condition_class" value="custom_filters"/>
+        <parameter key="invert_filter" value="false"/>
+        <list key="filters_list">
+          <parameter key="filters_entry_key" value="age.ge.9\.5"/>
+          <parameter key="filters_entry_key" value="age.le.69\.5"/>
+          <parameter key="filters_entry_key" value="duration.le.638"/>
+          <parameter key="filters_entry_key" value="campaign.le.6"/>
+        </list>
+        <parameter key="filters_logic_and" value="true"/>
+        <parameter key="filters_check_metadata" value="true"/>
+      </operator>
+      <operator activated="true" class="map" compatibility="9.10.007" expanded="true" height="82" name="Mapeo de datos" width="90" x="313" y="238">
+        <parameter key="attribute_filter_type" value="subset"/>
+        <parameter key="attribute" value="education"/>
+        <parameter key="attributes" value="education"/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="attribute_value"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="time"/>
+        <parameter key="block_type" value="attribute_block"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_matrix_row_start"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <list key="value_mappings"/>
+        <parameter key="replace_what" value="basic.9y|basic.6y|basic.4y"/>
+        <parameter key="replace_by" value="BASIC"/>
+        <parameter key="consider_regular_expressions" value="true"/>
+        <parameter key="add_default_mapping" value="false"/>
+      </operator>
+      <operator activated="true" class="generate_attributes" compatibility="9.10.007" expanded="true" height="82" name="Mapeo de Mes y Día de la semana" width="90" x="447" y="34">
+        <list key="function_descriptions">
+          <parameter key="month" value="if(month ==&quot;mar&quot;,3,if(month ==&quot;apr&quot;,4,if(month ==&quot;may&quot;,5,if(month ==&quot;jun&quot;,6,if(month ==&quot;jul&quot;,7,if(month ==&quot;aug&quot;,8,if(month ==&quot;sep&quot;,9,if(month ==&quot;oct&quot;,10,if(month ==&quot;nov&quot;,11,12)))))))))"/>
+          <parameter key="day_of_week" value="if(day_of_week ==&quot;mon&quot;,1,if(day_of_week ==&quot;tue&quot;,2,if(day_of_week ==&quot;wed&quot;,3,if(day_of_week ==&quot;thu&quot;,1,5))))"/>
+        </list>
+        <parameter key="keep_all" value="true"/>
+      </operator>
+      <operator activated="true" class="concurrency:correlation_matrix" compatibility="9.10.007" expanded="true" height="103" name="Matriz de Correlación" width="90" x="581" y="238">
+        <parameter key="attribute_filter_type" value="all"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value=""/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="attribute_value"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="time"/>
+        <parameter key="block_type" value="attribute_block"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_matrix_row_start"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <parameter key="normalize_weights" value="true"/>
+        <parameter key="squared_correlation" value="false"/>
+      </operator>
+      <operator activated="true" class="select_by_weights" compatibility="9.10.007" expanded="true" height="103" name="Selección por peso" width="90" x="782" y="34">
+        <parameter key="weight_relation" value="greater equals"/>
+        <parameter key="weight" value="0.5"/>
+        <parameter key="k" value="10"/>
+        <parameter key="p" value="0.5"/>
+        <parameter key="deselect_unknown" value="true"/>
+        <parameter key="use_absolute_weights" value="true"/>
+      </operator>
+      <operator activated="true" class="select_attributes" compatibility="9.10.007" expanded="true" height="82" name="Eliminacióin del atributo duration" width="90" x="983" y="34">
+        <parameter key="attribute_filter_type" value="subset"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value="age|campaign|cons.conf.idx|cons.price.idx|contact|day_of_week|default|education|emp.var.rate|euribor3m|housing|job|loan|marital|month|nr.employed|pdays|poutcome|previous|y"/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="attribute_value"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="time"/>
+        <parameter key="block_type" value="attribute_block"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_matrix_row_start"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+      </operator>
+      <operator activated="true" class="normalize" compatibility="9.10.007" expanded="true" height="103" name="Normalización" width="90" x="1117" y="187">
+        <parameter key="return_preprocessing_model" value="false"/>
+        <parameter key="create_view" value="false"/>
+        <parameter key="attribute_filter_type" value="all"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value=""/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="numeric"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="real"/>
+        <parameter key="block_type" value="value_series"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_series_end"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <parameter key="method" value="Z-transformation"/>
+        <parameter key="min" value="0.0"/>
+        <parameter key="max" value="1.0"/>
+        <parameter key="allow_negative_values" value="false"/>
+      </operator>
+      <connect from_op="bank-additionl.csv" from_port="output" to_op="Filtrado IQR" to_port="example set input"/>
+      <connect from_op="Filtrado IQR" from_port="example set output" to_op="Mapeo de datos" to_port="example set input"/>
+      <connect from_op="Mapeo de datos" from_port="example set output" to_op="Mapeo de Mes y Día de la semana" to_port="example set input"/>
+      <connect from_op="Mapeo de Mes y Día de la semana" from_port="example set output" to_op="Matriz de Correlación" to_port="example set"/>
+      <connect from_op="Matriz de Correlación" from_port="example set" to_op="Selección por peso" to_port="example set input"/>
+      <connect from_op="Matriz de Correlación" from_port="weights" to_op="Selección por peso" to_port="weights"/>
+      <connect from_op="Selección por peso" from_port="example set output" to_op="Eliminacióin del atributo duration" to_port="example set input"/>
+      <connect from_op="Eliminacióin del atributo duration" from_port="example set output" to_op="Normalización" to_port="example set input"/>
+      <connect from_op="Normalización" from_port="example set output" to_port="result 1"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+    </process>
+  </operator>
+</process>
